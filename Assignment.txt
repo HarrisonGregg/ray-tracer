@@ -1,0 +1,67 @@
+Write a C++ program that renders an image using ray tracing and displays it using OpenGL.
+
+Please submit your code along with a rendered _image_ prominently displaying the implemented features.
+
+Some tasks require surface parametrization. It is OK to project the egg onto a spherical surface for parametrization (i.e. just use the sphere's UV code).
+
+Shadows are required. An infinite ground plane is required.
+
+All tasks from the below lists are worth some points. Implement
+17 pts worth for A+
+15 pts worth for A
+12 pts worth for B
+10 pts worth for C
+8 pts worth for D
+6 pts worth for E
+
+The image should depict various types of Easter eggs and other paraphernalia, from the following list:
+
+*The golden egg - 2 pts
+An egg with ideal reflection. Use the Fresnel formula approximation for a golden look. You might also throw in a copper and a platinum egg for comparison. Make sure a number of other objects are reflected.
+
+*The painted egg - 2 pts
+An egg with 2D procedural texturing. Artsy.
+
+*The marble egg - 2 pts
+An egg with 3D procedural texturing. Use the Perlin noise function to get a marble look.
+
+The chocolate egg missing a bite - 3 pts
+A solid obtained as the regular difference of two intersectable objects (the egg and the missing bite). The outer surface should have Phong-specular reflection, the inside surface, Lambertian. The ray-intersection method should compute all intersections with both the egg and the bite sphere, and figure which of those is the actual hit.
+
+*The carved egg - 3 pts
+An egg with a (2D or 3D) procedural mask for transparency. Intersection points where the surface is transparent (carved away) should be discarded. You may place another object within the egg for added effect.
+
+*The glass egg - 3 pts
+An egg made of ideally refractive material.
+
+The bunny - 2 pts
+Must have long ears. Use any raytracable primitives and material models you see fit.
+
+Fluffy clouds - 2 pts
+A cluster of quadratic surfaces. Use any primitives, material models, and colorful lighting.
+
+An open can of paint - 3 pts
+A silver cylinder with its top transparent, with a surface of red paint visible inside.
+
+Chicken - 2 pts
+Must have a cone (which is a quadratic surface) for a beak.
+
+The glowing egg - 2 pts
+Has own emission, doubles as a positional light source.
+
+*The cube - 3 pts 
+Simplest to implement as a regular intersection of six half-spaces (i.e. delimited by six planes).
+
+
+The standard solution is that the eggs are implemented as ellipsoids, their axes aligned with the world space coordinate axes. More than that is worth additional points:
+
+*Rotated eggs - 3 pts
+Your eggs are not all standing upright, but they are rotated. This can be done by implementing transformed objects. When intersecting a ray with a transformed object, you first transforme the ray to model space, intersect it with the model, compute hit point and normal, and transform them back to world space.
+
+*Plastic eggs - 3 pts
+Your eggs are not symmetric ellipsoids, but composed of two half-ellipsoids, one more oblong than the other. Take care to ensure tangential continuity. Unfortunately, you cannot achieve curvature-continuity this way, which shows especially for reflective and refractive eggs.
+
+Eggs that would make a hen proud - 5 pts
+Your eggs are modeled as implicit surfaces of the form
+f(x, y, z) = (x^2 + y^2 + z^2)^2 - a * y^3 - (a - b) * (x^2 + z^2)^2 * y = 0.
+Computing the intersection means finding a point where f is very close to zero. This could be done by ray marching -- advancing a point along the ray in small steps, always checking if the sign of f changed. That, in itself, is very slow. You can speed it up by intersecting the ray with and enclosing ellipsoid first, and starting the ray marching form that intersection point. Also, when you already have two points, one with positive and one with negative value of f, you can use secant search to get an accurate result quickly. The normal vector formula for implicit surface --the one using the partial derivatives-- works here.
